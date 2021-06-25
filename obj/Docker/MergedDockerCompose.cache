@@ -1,0 +1,13 @@
+services:
+  graphql_api:
+    build:
+      context: C:\CoreAPI\GraphQL_API
+      dockerfile: GraphQL_API\Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: graphqlapi
+    ports:
+    - target: 80
+    volumes:
+    - C:\Users\USER\AppData\Roaming\Microsoft\UserSecrets:C:\Users\ContainerUser\AppData\Roaming\Microsoft\UserSecrets:ro
+version: '3.4'
