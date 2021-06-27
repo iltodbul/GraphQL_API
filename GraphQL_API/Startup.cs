@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL.Server.Ui.Voyager;
 using GraphQL_API.Data;
 using GraphQL_API.GraphQL;
 using Microsoft.EntityFrameworkCore;
@@ -34,12 +35,13 @@ namespace GraphQL_API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GraphQL_API", Version = "v1" });
             });
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddPooledDbContextFactory<AppDbContext>(options =>
                 options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             services
                 .AddGraphQLServer()
-                .AddQueryType<Query>();
+                .AddQueryType<Query>()
+                .AddProjections();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +63,12 @@ namespace GraphQL_API
                 //endpoints.MapControllers();
                 endpoints.MapGraphQL();
             });
+
+            app.UseGraphQLVoyager(new VoyagerOptions()
+            {
+                GraphQLEndPoint = "/graphql"
+                
+            }, "/graphql-voyager");
         }
     }
 }

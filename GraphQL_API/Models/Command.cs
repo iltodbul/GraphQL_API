@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 namespace GraphQL_API.Models
 {
-    public class Platform
+    public class Command
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string HowTo { get; set; }
 
-        public string LicenseKey { get; set; }
+        [Required]
+        public string CommandLine { get; set; }
 
-        public ICollection<Command> Commands { get; set; } = new HashSet<Command>();
+        [Required]
+        public int PlatformId { get; set; }
+        public Platform Platform { get; set; }
+
     }
 }

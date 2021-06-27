@@ -3,14 +3,16 @@ using GraphQL_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GraphQL_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210627145121_AddCommandModel")]
+    partial class AddCommandModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,17 +67,12 @@ namespace GraphQL_API.Migrations
             modelBuilder.Entity("GraphQL_API.Models.Command", b =>
                 {
                     b.HasOne("GraphQL_API.Models.Platform", "Platform")
-                        .WithMany("Commands")
+                        .WithMany()
                         .HasForeignKey("PlatformId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Platform");
-                });
-
-            modelBuilder.Entity("GraphQL_API.Models.Platform", b =>
-                {
-                    b.Navigation("Commands");
                 });
 #pragma warning restore 612, 618
         }
