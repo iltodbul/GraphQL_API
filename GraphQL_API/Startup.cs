@@ -37,8 +37,11 @@ namespace GraphQL_API
             services
                 .AddGraphQLServer()
                 .AddQueryType<Query>()
+                .AddMutationType<Mutation>()
                 .AddType<PlatformType>()
-                .AddType<CommandType>();
+                .AddType<CommandType>()
+                .AddSorting()
+                .AddFiltering();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

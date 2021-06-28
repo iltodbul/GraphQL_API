@@ -19,7 +19,7 @@ namespace GraphQL_API.GraphQL.Commands
                 .Field(x => x.Platform)
                 .ResolveWith<Resolvers>(x => x.GePlatform(default!, default!))
                 .UseDbContext<AppDbContext>()
-                .Description("This is the platform to witch the command belongs");
+                .Description("This is the platform to which the command belongs");
         }
 
         private class Resolvers
