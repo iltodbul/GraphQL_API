@@ -2,6 +2,7 @@
 using HotChocolate;
 using HotChocolate.Data;
 using System.Threading.Tasks;
+using GraphQL_API.GraphQL.Commands;
 using GraphQL_API.GraphQL.Platforms;
 using GraphQL_API.Models;
 
@@ -19,6 +20,23 @@ namespace GraphQL_API.GraphQL
             await context.SaveChangesAsync();
 
             return new AddPlatformPayload(platform);
+        }
+
+        [UseDbContext(typeof(AppDbContext))]
+        public async Task<AddCommandPayload> AddCommandAsync(AddCommandInput input,
+            [ScopedService] AppDbContext context)
+        {
+            var command = new Command
+            {
+                CommandLine = input.CommandLine,
+                HowTo = input.HowTo,
+                PlatformId = input.PlatformId
+            };
+
+            context.Commands.Add(command);
+            await context.SaveChangesAsync();
+
+            return new AddCommandPayload(command);
         }
     }
 }
