@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using GraphQL_API.Data;
 using HotChocolate;
 using HotChocolate.Data;
@@ -6,19 +7,26 @@ using System.Threading.Tasks;
 using GraphQL_API.GraphQL.Commands;
 using GraphQL_API.GraphQL.Platforms;
 using GraphQL_API.Models;
+using HotChocolate.Subscriptions;
 
 namespace GraphQL_API.GraphQL
 {
     public class Mutation
     {
         [UseDbContext(typeof(AppDbContext))]
-        public async Task<AddPlatformPayload> AddPlatformAsync(AddPlatformInput input,
-            [ScopedService] AppDbContext context)
+        public async Task<AddPlatformPayload> AddPlatformAsync(
+            AddPlatformInput input,
+            [ScopedService] AppDbContext context,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken
+            )
         {
             var platform = new Platform { Name = input.Name };
 
             context.Platforms.Add(platform);
             await context.SaveChangesAsync();
+
+            await eventSender.SendAsync(nameof(Subscription.OnPlatformAdded), platform, cancellationToken);
 
             return new AddPlatformPayload(platform);
         }
