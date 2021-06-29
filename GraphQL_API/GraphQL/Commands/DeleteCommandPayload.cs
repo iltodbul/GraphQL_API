@@ -6,5 +6,5 @@ using GraphQL_API.Models;
 
 namespace GraphQL_API.GraphQL.Commands
 {
-    public record AddCommandPayload(Command comand);
+    public record DeleteCommandPayload(Command command);
 }

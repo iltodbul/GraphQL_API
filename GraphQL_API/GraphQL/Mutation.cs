@@ -1,4 +1,5 @@
-﻿using GraphQL_API.Data;
+﻿using System.Linq;
+using GraphQL_API.Data;
 using HotChocolate;
 using HotChocolate.Data;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace GraphQL_API.GraphQL
         }
 
         [UseDbContext(typeof(AppDbContext))]
-        public async Task<AddCommandPayload> AddCommandAsync(AddCommandInput input,
+        public async Task<DeleteCommandPayload> AddCommandAsync(AddCommandInput input,
             [ScopedService] AppDbContext context)
         {
             var command = new Command
@@ -36,7 +37,19 @@ namespace GraphQL_API.GraphQL
             context.Commands.Add(command);
             await context.SaveChangesAsync();
 
-            return new AddCommandPayload(command);
+            return new DeleteCommandPayload(command);
+        }
+
+        [UseDbContext(typeof(AppDbContext))]
+        public async Task<DeleteCommandPayload> DeleteCommandAsync(int id,
+            [ScopedService] AppDbContext context)
+        {
+            var command = context.Commands.FirstOrDefault(x => x.Id == id);
+
+            context.Commands.Remove(command);
+            await context.SaveChangesAsync();
+
+            return new DeleteCommandPayload(command);
         }
     }
 }
